@@ -15,11 +15,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\usuario_local\\Pictures\\P2 FP1\\P2 FP1.csproj",
+      "projectUniqueName": "C:\\Users\\usuario_local\\Pictures\\P2-FP1\\P2 FP1.csproj",
       "projectName": "P2 FP1",
-      "projectPath": "C:\\Users\\usuario_local\\Pictures\\P2 FP1\\P2 FP1.csproj",
+      "projectPath": "C:\\Users\\usuario_local\\Pictures\\P2-FP1\\P2 FP1.csproj",
       "packagesPath": "C:\\Users\\usuario_local\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\usuario_local\\Pictures\\P2 FP1\\obj\\",
+      "outputPath": "C:\\Users\\usuario_local\\Pictures\\P2-FP1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "c:\\software\\programacion\\MSVStudio2017\\Shared\\NuGetPackages",
