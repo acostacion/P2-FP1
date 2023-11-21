@@ -50,68 +50,74 @@ namespace P2_FP1
 
         static void Render(int[] suelo, int[] techo, int fil, int frame, int puntos, bool colision)
         {
+            // Limpia la consola.
             Console.Clear();
 
+            // Dibuja el techo y el suelo en la pantalla. El bucle va pasando de 0 a ANCHO y va moviendose por los huecos del array.
             for (int i = 0; i < ANCHO; i++)
             {
-                Console.SetCursorPosition(techo[i], 0);
+                // Dibuja un bloque (por cada iteración) en la posición correspondiente al techo.
+                Console.SetCursorPosition(i * 2, ALTO - techo[i]);
                 Console.BackgroundColor = ConsoleColor.Red;
-                Console.Write(" ");
+                Console.Write("  ");
 
-                Console.SetCursorPosition(suelo[i], ALTO);
+                // Dibuja un bloque (por cada iteración) en la posición correspondiente al suelo.
+                Console.SetCursorPosition(i * 2, ALTO - suelo[i]);
                 Console.BackgroundColor = ConsoleColor.Blue;
-                Console.Write(" ");
+                Console.Write("  ");
             }
 
-            //if(!colision)
-            //{
-            //    Console.SetCursorPosition(fil, COL_BIRD);
-            //    Console.BackgroundColor = ConsoleColor.Magenta;
-            //    Console.Write("->");
-            //}
-            //else
-            //{
-            //    Console.SetCursorPosition(fil, COL_BIRD);
-            //    Console.BackgroundColor = ConsoleColor.Red;
-            //    Console.Write("**");
-            //}
-
-            //if (DEBUG)
-            //{
-            //    Console.SetCursorPosition(0, ALTO + 2);
-            //    Console.WriteLine("Puntos: " + puntos);
-            //    for (int i = 0; i < suelo.Length; i++)
-            //    {
-            //        Console.Write(" " + techo[i]);
-            //        Console.WriteLine("");
-            //        Console.Write(" " + suelo[i]);
-            //        Console.WriteLine("");
-            //    }
-            //    Console.WriteLine("Pos bird: " + fil);
-            //    Console.WriteLine("Frame:  " + frame);
-            //}
-            
-            
-
-
-
-
-
-
-
-
-
-
-
-            /*for(int i = 0; i < suelo.Length; i++)
+            // Si no hay colisión...
+            if (!colision)
             {
-                suelo[i] = rnd.Next(0,4);
-                techo[i] = suelo[i] + HUECO;                           
-            }*/
+                // Dibuja el pájaro con fondo magenta.
+                Console.SetCursorPosition(fil, COL_BIRD);
+                Console.BackgroundColor = ConsoleColor.Magenta;
+                Console.Write("->");
+            }
+            // Si hay colisión...
+            else
+            {
+                // Dibuja la muerte del pájaro en rojo.
+                Console.SetCursorPosition(fil, COL_BIRD);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write("**");
+            }
 
+            // Si está el debug activado...
+            if (DEBUG)
+            {
+                // Ponemos el fondo negro para el debug.
+                Console.BackgroundColor = ConsoleColor.Black;
 
+                // Muestra los puntos.
+                Console.SetCursorPosition(0, ALTO + 2);
+                Console.WriteLine("Puntos: " + puntos);
 
+                // Muestra los valores del techo.
+                for (int i = 0; i < techo.Length; i++)
+                {
+                    Console.Write(" " + techo[i]);
+                }
+                Console.Write(" (techo)");
+                Console.WriteLine("");
+
+                // Muestra los valores del suelo.
+                for(int i = 0; i < suelo.Length; i++)
+                {
+                    Console.Write(" " + suelo[i]);
+                }
+                Console.Write(" (suelo)");
+                Console.WriteLine("");
+
+                // Muestra la posición del pájaro.
+                Console.Write("Pos bird: " + fil + "  ");
+
+                // Muestra el valor de los frames.
+                Console.WriteLine("Frame:  " + frame);
+            }
         }
+
     }
 }
 
