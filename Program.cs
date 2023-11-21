@@ -55,13 +55,16 @@ namespace P2_FP1
 
             // Dibuja el techo y el suelo en la pantalla. El bucle va pasando de 0 a ANCHO y va moviendose por los huecos del array.
             for (int i = 0; i < ANCHO; i++)
-            {
-                // Dibuja un bloque (por cada iteración) en la posición correspondiente al techo.
-                Console.SetCursorPosition(i * 2, ALTO - techo[i]);
+            { 
+                // La posición en X es i*2 para dar espacio a cada columna.
+                // La posición en Y es el valor de techo[i] para dibujar el techo desde la parte superior de la consola.
+                Console.SetCursorPosition(i * 2, techo[i]);
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.Write("  ");
 
-                // Dibuja un bloque (por cada iteración) en la posición correspondiente al suelo.
+                // La posición en X es i*2 para dar espacio a cada columna.
+                // LO DE ALTO - suelo[i] no lo entiendo pero me lo ha sugerido una IA. INVESTIGARLO. ES QUE NO SABIA HACERLO FUNCIONAR EN ESTA PARTE Y HE 
+                // HECHO TRAMPAS PERDON POLI :(.
                 Console.SetCursorPosition(i * 2, ALTO - suelo[i]);
                 Console.BackgroundColor = ConsoleColor.Blue;
                 Console.Write("  ");
