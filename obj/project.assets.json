@@ -8,34 +8,28 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\usuario_local\\.nuget\\packages\\": {},
-    "c:\\software\\programacion\\MSVStudio2017\\Shared\\NuGetPackages": {},
-    "c:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\LENOVO\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\usuario_local\\Pictures\\P2-FP1\\P2 FP1.csproj",
+      "projectUniqueName": "D:\\P2-FP1\\P2 FP1.csproj",
       "projectName": "P2 FP1",
-      "projectPath": "C:\\Users\\usuario_local\\Pictures\\P2-FP1\\P2 FP1.csproj",
-      "packagesPath": "C:\\Users\\usuario_local\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\usuario_local\\Pictures\\P2-FP1\\obj\\",
+      "projectPath": "D:\\P2-FP1\\P2 FP1.csproj",
+      "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+      "outputPath": "D:\\P2-FP1\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "c:\\software\\programacion\\MSVStudio2017\\Shared\\NuGetPackages",
-        "c:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\usuario_local\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "c:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {},
+        "https://nuget.emzi0767.com/api/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
@@ -68,7 +62,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "c:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -28,3 +28,17 @@ C:\Users\Usuario\Documents\P2-FP1\obj\Debug\net6.0\refint\P2 FP1.dll
 C:\Users\Usuario\Documents\P2-FP1\obj\Debug\net6.0\P2 FP1.pdb
 C:\Users\Usuario\Documents\P2-FP1\obj\Debug\net6.0\P2 FP1.genruntimeconfig.cache
 C:\Users\Usuario\Documents\P2-FP1\obj\Debug\net6.0\ref\P2 FP1.dll
+D:\P2-FP1\bin\Debug\net6.0\P2 FP1.exe
+D:\P2-FP1\bin\Debug\net6.0\P2 FP1.deps.json
+D:\P2-FP1\bin\Debug\net6.0\P2 FP1.runtimeconfig.json
+D:\P2-FP1\bin\Debug\net6.0\P2 FP1.dll
+D:\P2-FP1\bin\Debug\net6.0\P2 FP1.pdb
+D:\P2-FP1\obj\Debug\net6.0\P2 FP1.GeneratedMSBuildEditorConfig.editorconfig
+D:\P2-FP1\obj\Debug\net6.0\P2 FP1.AssemblyInfoInputs.cache
+D:\P2-FP1\obj\Debug\net6.0\P2 FP1.AssemblyInfo.cs
+D:\P2-FP1\obj\Debug\net6.0\P2 FP1.csproj.CoreCompileInputs.cache
+D:\P2-FP1\obj\Debug\net6.0\P2 FP1.dll
+D:\P2-FP1\obj\Debug\net6.0\refint\P2 FP1.dll
+D:\P2-FP1\obj\Debug\net6.0\P2 FP1.pdb
+D:\P2-FP1\obj\Debug\net6.0\P2 FP1.genruntimeconfig.cache
+D:\P2-FP1\obj\Debug\net6.0\ref\P2 FP1.dll

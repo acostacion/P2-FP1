@@ -90,43 +90,30 @@ namespace P2_FP1
                 Console.BackgroundColor = ConsoleColor.Blue;
                 Console.Write("  ");
             }*/
-           
+
 
             // I ES PARA MOVER A TRAVÉS DE LAS COLUMNAS.
             // J PARA MOVER A TRAVÉS DE LAS FILAS.
 
             // La idea es poner el huevo e ir restando pa'trás y to eso. Colocas lo del suelo o techo y vas echando pa atrás con el for.
             // Necesitas el cambio de coords para hacerlo.
-            for (int i = 0; i < ANCHO; i++)
+            Console.BackgroundColor = ConsoleColor.Blue;
+            for (int i = 0; i < ANCHO; ++i)
             {
-                for(int j = suelo[suelo.Length-1]; j > 0; j--)
+                //TECHO
+                for (int j = 0; j <= Convierte(techo[i]); j++)
                 {
-                    Console.SetCursorPosition(i, j);
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write("A");
+                    Console.SetCursorPosition(i * 2, j);
+                    Console.Write("  ");
                 }
-
-                for(int j = suelo.Length + 1; j < techo[0]; j++)
+                //SUELO
+                for (int j = ALTO - 1; j >= Convierte(suelo[i]); j--)
                 {
-                    /*Console.SetCursorPosition(i, suelo[j]);
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.Write("A");*/
+                    Console.SetCursorPosition(i * 2, j);
+                    Console.Write("  ");
                 }
-
-                for(int j = techo[0]; j < techo.Length; j++)
-                {
-                    Console.SetCursorPosition(i, techo[j]);
-                    Console.BackgroundColor = ConsoleColor.Blue;
-                    Console.Write("A");
-                }
-                
-
-                /*Console.SetCursorPosition(i, )
-
-                Console.SetCursorPosition(i, rnd.Next(HUECO + 1, techo.Length));
-                Console.BackgroundColor = ConsoleColor.Blue;
-                Console.Write(" ");*/
             }
+            Console.BackgroundColor = ConsoleColor.Black;
 
             // Si no hay colisión...
             if (!colision)
