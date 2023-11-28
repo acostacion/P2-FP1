@@ -24,16 +24,32 @@ namespace P2_FP1
         #endregion
 
         static void Main()
-        { // programa principal
+        { 
+            // Declaraciones anteriores.
             int[] suelo = { 0, 1, 0, 0, 2, 0, 0, 3, 0 }, techo = { 7, 5, 7, 7, 6, 7, 7, 7, 7 };
             int fil, ascenso, frame, puntos;
             bool colision = true;
 
+            // Inicialización.
             Inicializa(out suelo, out techo, out fil, out ascenso, out frame, out puntos, ref colision);
+
+            // Renderizado.
             Render(suelo, techo, fil, frame, puntos, colision);
+
+            // Bucle principal.
             while(!colision)
             {
+                // Lectura de input.
+                LeeInput();
 
+                // Si el juego continua.
+
+                // Scrool lateral + movimiento pájaro + colisiones + gestión de puntos.
+
+                // Renderizado.
+                Render(suelo, techo, fil, frame, puntos, colision);
+
+                Thread.Sleep(DELTA);
             }
 
         }
@@ -42,6 +58,11 @@ namespace P2_FP1
         {
             suelo = new int[ANCHO];
             techo = new int[ANCHO];
+            for (int i = 0; i<ANCHO; i++)
+            {
+                suelo[i] = 0;
+                techo[i]= 7;    
+            }
             fil = ALTO / 2;
             ascenso = -1;
             frame = puntos = 0;
@@ -53,7 +74,7 @@ namespace P2_FP1
             // Limpia la consola.
             Console.Clear();
 
-            // Dibuja el techo y el suelo en la pantalla. El bucle va pasando de 0 a ANCHO y va moviendose por los huecos del array.
+            /*// Dibuja el techo y el suelo en la pantalla. El bucle va pasando de 0 a ANCHO y va moviendose por los huecos del array.
             for (int i = 0; i < ANCHO; i++)
             { 
                 // La posición en X es i*2 para dar espacio a cada columna.
@@ -68,6 +89,43 @@ namespace P2_FP1
                 Console.SetCursorPosition(i * 2, ALTO - suelo[i]);
                 Console.BackgroundColor = ConsoleColor.Blue;
                 Console.Write("  ");
+            }*/
+           
+
+            // I ES PARA MOVER A TRAVÉS DE LAS COLUMNAS.
+            // J PARA MOVER A TRAVÉS DE LAS FILAS.
+
+            // La idea es poner el huevo e ir restando pa'trás y to eso. Colocas lo del suelo o techo y vas echando pa atrás con el for.
+            // Necesitas el cambio de coords para hacerlo.
+            for (int i = 0; i < ANCHO; i++)
+            {
+                for(int j = suelo[suelo.Length-1]; j > 0; j--)
+                {
+                    Console.SetCursorPosition(i, j);
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.Write("A");
+                }
+
+                for(int j = suelo.Length + 1; j < techo[0]; j++)
+                {
+                    /*Console.SetCursorPosition(i, suelo[j]);
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.Write("A");*/
+                }
+
+                for(int j = techo[0]; j < techo.Length; j++)
+                {
+                    Console.SetCursorPosition(i, techo[j]);
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Console.Write("A");
+                }
+                
+
+                /*Console.SetCursorPosition(i, )
+
+                Console.SetCursorPosition(i, rnd.Next(HUECO + 1, techo.Length));
+                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.Write(" ");*/
             }
 
             // Si no hay colisión...
@@ -84,7 +142,7 @@ namespace P2_FP1
                 // Dibuja la muerte del pájaro en rojo.
                 Console.SetCursorPosition(fil, COL_BIRD);
                 Console.BackgroundColor = ConsoleColor.Red;
-                Console.Write("**");
+                Console.Write("**"); 
             }
 
             // Si está el debug activado...
@@ -121,6 +179,24 @@ namespace P2_FP1
             }
         }
 
+        static char LeeInput()
+        {
+            char ch = ' ';
+            if (Console.KeyAvailable)
+            {
+                string s = Console.ReadKey(true).Key.ToString();
+                if (s == "X" || s == "Spacebar") ch = 'i'; // Impulso.                   
+                else if (s == "P") ch = 'p'; // Pausa.					
+                else if (s == "Q" || s == "Escape") ch = 'q'; // Salir.
+                while (Console.KeyAvailable) Console.ReadKey();
+            }
+            return ch;
+        }
+
+        static int Convierte(int c)
+        {
+            return (ALTO - 1) - c;
+        }
     }
 }
 
