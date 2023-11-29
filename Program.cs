@@ -1,6 +1,9 @@
 ﻿// Paula Sierra Luque
 // José Tomás Gómez Becerra
 
+using System.Drawing;
+using System;
+
 namespace P2_FP1
 {
     class Program
@@ -71,50 +74,33 @@ namespace P2_FP1
 
         static void Render(int[] suelo, int[] techo, int fil, int frame, int puntos, bool colision)
         {
-            // Limpia la consola.
+            // Limpia la consola en cada render.
             Console.Clear();
 
-            /*// Dibuja el techo y el suelo en la pantalla. El bucle va pasando de 0 a ANCHO y va moviendose por los huecos del array.
-            for (int i = 0; i < ANCHO; i++)
-            { 
-                // La posición en X es i*2 para dar espacio a cada columna.
-                // La posición en Y es el valor de techo[i] para dibujar el techo desde la parte superior de la consola.
-                Console.SetCursorPosition(i * 2, techo[i]);
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.Write("  ");
-
-                // La posición en X es i*2 para dar espacio a cada columna.
-                // LO DE ALTO - suelo[i] no lo entiendo pero me lo ha sugerido una IA. INVESTIGARLO. ES QUE NO SABIA HACERLO FUNCIONAR EN ESTA PARTE Y HE 
-                // HECHO TRAMPAS PERDON POLI :(.
-                Console.SetCursorPosition(i * 2, ALTO - suelo[i]);
-                Console.BackgroundColor = ConsoleColor.Blue;
-                Console.Write("  ");
-            }*/
-
-
-            // I ES PARA MOVER A TRAVÉS DE LAS COLUMNAS.
-            // J PARA MOVER A TRAVÉS DE LAS FILAS.
-
-            // La idea es poner el huevo e ir restando pa'trás y to eso. Colocas lo del suelo o techo y vas echando pa atrás con el for.
-            // Necesitas el cambio de coords para hacerlo.
+            // Color azul para pintar las paredes.
             Console.BackgroundColor = ConsoleColor.Blue;
+            // Vamos recorriendo el ANCHO.
             for (int i = 0; i < ANCHO; ++i)
             {
-                //TECHO
+                // TECHO. Recorremos el array de techo, desde techo[0] hasta techo[i],
+                // pintando así cada coordenada (i*2,j), en cada vuelta. 
                 for (int j = 0; j <= Convierte(techo[i]); j++)
                 {
                     Console.SetCursorPosition(i * 2, j);
                     Console.Write("  ");
                 }
-                //SUELO
+                // SUELO. Recorremos el array de suelo, desde suelo[ALTO-1] hasta suelo[0] (hacia atrás),
+                // pintando así cada coordenada (i*2,j), en cada vuelta. 
                 for (int j = ALTO - 1; j >= Convierte(suelo[i]); j--)
                 {
                     Console.SetCursorPosition(i * 2, j);
                     Console.Write("  ");
                 }
             }
+            // Devolvemos el color negro a la consola.
             Console.BackgroundColor = ConsoleColor.Black;
 
+            #region Colision
             // Si no hay colisión...
             if (!colision)
             {
@@ -131,7 +117,9 @@ namespace P2_FP1
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.Write("**"); 
             }
+            #endregion
 
+            #region Debug
             // Si está el debug activado...
             if (DEBUG)
             {
@@ -164,6 +152,21 @@ namespace P2_FP1
                 // Muestra el valor de los frames.
                 Console.WriteLine("Frame:  " + frame);
             }
+            #endregion
+        }
+
+        static void Avanza(int[] suelo, int[] techo, int frame)
+        {
+            //hace el scroll lateral del área de juego,
+            //desplazando todos los elementos de suelo y techo una posición a la izquierda. En la última posición
+            //se generan nuevos valores s y t para suelo y techo respectivamente.
+            //Cada SEP_OBS frames se genera un nuevo obstáculo situado aleatoriamente dentro de esa columna. De
+            //acuerdo a la lógica del juego se tiene 0 ≤ s < t ≤ ALTO − 1 y además el espacio de paso entre ambos
+            //será HUECO, es decir: t − s = HUECO − 1.Esto puede conseguirse fácilmente generando aleatoriamente
+            //el valor s en el rango apropiado y luego calculando t en función de s y HUECO.
+            //Con este método ya puede hacerse una primera versión del bucle principal para mostrar el scroll lateral
+            //con el suelo y el techo(y la generación de obstáculos)
+
         }
 
         static char LeeInput()
@@ -184,6 +187,7 @@ namespace P2_FP1
         {
             return (ALTO - 1) - c;
         }
+        
     }
 }
 
