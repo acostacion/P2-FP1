@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace P2_FP1
 {
@@ -58,15 +59,18 @@ namespace P2_FP1
 
         }
 
-        static void Inicializa(out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, ref bool colision)
+        static void Inicializa(out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, ref bool colision) //done
         {
             suelo = new int[ANCHO];
             techo = new int[ANCHO];
+
+            // Inicializamos sin obstáculos:
             for (int i = 0; i<ANCHO; i++)
             {
                 suelo[i] = 0;
                 techo[i]= 7;    
             }
+
             fil = ALTO / 2;
             ascenso = -1;
             frame = puntos = 0;
@@ -158,29 +162,36 @@ namespace P2_FP1
 
         static void Avanza(int[] suelo, int[] techo, int frame)
         {
-            //Desplazando todos los elementos de suelo y techo una posición a la izquierda. En la última posición
-            //se generan nuevos valores s y t para suelo y techo respectivamente.
-            
             // ---- 1º MOVEMOS EL ARRAY CADA POSICION A LA IZQUIERDA
-                    //reescribir techo[i] para que sea techo[i+1]:
-                        //techo =   { 7, 5, 7, 7, 6, 7, 7, 7, 7 }
-                        //pasaria a { 5, 7, 7, 6, 7, 7, 7, NEW }
 
             // Vamos moviendo techo hasta la PENultima posición del array.
             for(int i = 0; i < techo.Length - 1; i++)
             {
-                techo[i] = techo[i+1];
-
+                techo[i] = techo[i + 1];
+                suelo[i] = suelo[i + 1];
             }
-            for (int i = 0; i < suelo.Length - 1; i++)
+
+
+            // ---- 2º COMPROBAMOS SI HAY QUE DAR NUEVO VALOR
+            //Busqueda??¿ miramos 
+            int cont = 0; //contador
+            while (cont <= SEP_OBS)
             {
-                suelo[i] = suelo[i+1];
+                //no pintamos obstaculo
+                techo[techo.Length] = 7; 
+                suelo[suelo.Length] = 0;
+                
+                if (cont == SEP_OBS) //Cuando lleguemos
+                {
+                    // ---- 3º DAMOS VALOR NUEVO
+                    int s = rnd.Next(0, 4);
+                    int t = HUECO - 1 + s;
+
+                    suelo[suelo.Length] = s;
+                    techo[techo.Length] = t;
+                }
+                cont++;
             }
-
-
-            // ---- 2º CREAMOS VALORES NUEVOS PARA EL FINAL DEL ARRAY
-            //int s = suelo[suelo.Length],
-            //    t = techo[techo.Length];
 
             //Cada SEP_OBS frames se genera un nuevo obstáculo situado aleatoriamente dentro de esa columna. De
             //acuerdo a la lógica del juego se tiene 0 ≤ s < t ≤ ALTO − 1 y además el espacio de paso entre ambos
