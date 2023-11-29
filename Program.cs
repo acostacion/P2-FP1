@@ -47,7 +47,8 @@ namespace P2_FP1
 
                 // Si el juego continua.
 
-                // Scrool lateral + movimiento pájaro + colisiones + gestión de puntos.
+                // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
+                Avanza(suelo, techo, frame);
 
                 // Renderizado.
                 Render(suelo, techo, fil, frame, puntos, colision);
@@ -57,7 +58,7 @@ namespace P2_FP1
 
         }
 
-        static void Inicializa(out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, ref bool colision) //done.
+        static void Inicializa(out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, ref bool colision)
         {
             suelo = new int[ANCHO];
             techo = new int[ANCHO];
@@ -157,9 +158,30 @@ namespace P2_FP1
 
         static void Avanza(int[] suelo, int[] techo, int frame)
         {
-            //hace el scroll lateral del área de juego,
-            //desplazando todos los elementos de suelo y techo una posición a la izquierda. En la última posición
+            //Desplazando todos los elementos de suelo y techo una posición a la izquierda. En la última posición
             //se generan nuevos valores s y t para suelo y techo respectivamente.
+            
+            // ---- 1º MOVEMOS EL ARRAY CADA POSICION A LA IZQUIERDA
+                    //reescribir techo[i] para que sea techo[i+1]:
+                        //techo =   { 7, 5, 7, 7, 6, 7, 7, 7, 7 }
+                        //pasaria a { 5, 7, 7, 6, 7, 7, 7, NEW }
+
+            // Vamos moviendo techo hasta la PENultima posición del array.
+            for(int i = 0; i < techo.Length - 1; i++)
+            {
+                techo[i] = techo[i+1];
+
+            }
+            for (int i = 0; i < suelo.Length - 1; i++)
+            {
+                suelo[i] = suelo[i+1];
+            }
+
+
+            // ---- 2º CREAMOS VALORES NUEVOS PARA EL FINAL DEL ARRAY
+            //int s = suelo[suelo.Length],
+            //    t = techo[techo.Length];
+
             //Cada SEP_OBS frames se genera un nuevo obstáculo situado aleatoriamente dentro de esa columna. De
             //acuerdo a la lógica del juego se tiene 0 ≤ s < t ≤ ALTO − 1 y además el espacio de paso entre ambos
             //será HUECO, es decir: t − s = HUECO − 1.Esto puede conseguirse fácilmente generando aleatoriamente

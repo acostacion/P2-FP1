@@ -10,3 +10,6 @@
 .vs/P2 FP1/v17/.suo
 .vs/ProjectEvaluation/p2 fp1.metadata.v7.bin
 .vs/ProjectEvaluation/p2 fp1.projects.v7.bin
+obj/Debug/net6.0/P2 FP1.pdb
+*.dll
+*.pdb
