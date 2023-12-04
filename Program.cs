@@ -50,6 +50,9 @@ namespace P2_FP1
 
                 // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
                 Avanza(suelo, techo, frame);
+                Mueve(LeeInput(), ref fil, ref ascenso);
+                Colision(suelo, techo, fil);
+                Puntua(suelo, techo, ref puntos);
 
                 // Renderizado.
                 Render(suelo, techo, fil, frame, puntos, colision);
@@ -84,6 +87,7 @@ namespace P2_FP1
 
             // Color azul para pintar las paredes.
             Console.BackgroundColor = ConsoleColor.Blue;
+
             // Vamos recorriendo el ANCHO.
             for (int i = 0; i < ANCHO; ++i)
             {
@@ -94,6 +98,7 @@ namespace P2_FP1
                     Console.SetCursorPosition(i * 2, j);
                     Console.Write("  ");
                 }
+
                 // SUELO. Recorremos el array de suelo, desde suelo[ALTO-1] hasta suelo[0] (hacia atrás),
                 // pintando así cada coordenada (i*2,j), en cada vuelta. 
                 for (int j = ALTO - 1; j >= Convierte(suelo[i]); j--)
@@ -102,6 +107,7 @@ namespace P2_FP1
                     Console.Write("  ");
                 }
             }
+
             // Devolvemos el color negro a la consola.
             Console.BackgroundColor = ConsoleColor.Black;
 
@@ -162,6 +168,8 @@ namespace P2_FP1
 
         static void Avanza(int[] suelo, int[] techo, int frame)
         {
+            // NOTA DE JT: la última posición del array es x.Length - 1, no techo.Length.
+
             // ---- 1º MOVEMOS EL ARRAY CADA POSICION A LA IZQUIERDA
 
             // Vamos moviendo techo hasta la PENultima posición del array.
@@ -178,8 +186,8 @@ namespace P2_FP1
             while (cont <= SEP_OBS)
             {
                 //no pintamos obstaculo
-                techo[techo.Length] = 7; 
-                suelo[suelo.Length] = 0;
+                techo[techo.Length - 1] = 7; 
+                suelo[suelo.Length - 1] = 0;
                 
                 if (cont == SEP_OBS) //Cuando lleguemos
                 {
@@ -187,8 +195,8 @@ namespace P2_FP1
                     int s = rnd.Next(0, 4);
                     int t = HUECO - 1 + s;
 
-                    suelo[suelo.Length] = s;
-                    techo[techo.Length] = t;
+                    suelo[suelo.Length - 1] = s;
+                    techo[techo.Length - 1] = t;
                 }
                 cont++;
             }
@@ -201,6 +209,77 @@ namespace P2_FP1
             //con el suelo y el techo(y la generación de obstáculos)
 
         }
+
+        #region Métodos que controlan el movimiento del pájaro 
+        static void Mueve(char ch, ref int fil, ref int ascenso)
+        {
+            // fil y ascenso pasan por referencia para que los valores modificados salgan del método.
+
+            // Si ch==’i’...
+            if (ch == 'i')
+            {
+                // Ascenso toma el valor IMPULSO.
+                ascenso = ascenso + IMPULSO;
+            }
+
+            // Si ascenso ≥ 0... 
+            if (ascenso >= 0)
+            {
+                // Se incrementa fil.
+                fil++;
+
+                // Se decrementa ascenso.
+                ascenso--;
+            }
+
+            // En caso contrario...
+            else
+            {
+                // Se decrementa fil.
+                fil--;
+            }
+        }
+
+        static bool Colision(int[] suelo, int[] techo, int fil)
+        {
+            // TECHO. Recorremos el array de techo.
+            for (int i = 0; i <= techo.Length - 1; i++)
+            {
+                // Comprobamos colision con array de techo. Si coincide con 'fil', hay colisión.
+                if (fil == techo[i])
+                {
+                    return true;
+                }
+            }
+
+            // SUELO. Recorremos el array de suelo (para atrás).
+            for (int i = suelo.Length - 1; i >= 0; i--)
+            {
+                // Comprobamos colision con array de suelo. Si coincide con 'fil', hay colisión.
+                if (fil == suelo[i])
+                {
+                    return true;
+                }
+            }
+
+            // No hay colisión.
+            return false;
+        }
+
+        static void Puntua(int[] suelo, int[] techo, ref int puntos)
+        {
+            // puntos pasa por referencia porque se quiere que su valor salga del método.
+
+            // No sé realmente por qué no se puede añadir el parámetro fil a Puntua, haría todo más sencillo. Dejo por aquí una posible implementación NO VÁLIDA:
+
+            // Si no colisiona con las columnas...
+            if (!Colision(suelo, techo, fil))
+            {
+                // Suma puntos.
+                puntos++;
+            }
+        }
+        #endregion
 
         static char LeeInput()
         {
