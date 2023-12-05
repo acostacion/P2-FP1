@@ -14,11 +14,11 @@ namespace P2_FP1
         #region Constantes
         const bool DEBUG = true; // Para sacar información de depuración en el Renderizado.
 
-        const int ANCHO = 9, ALTO = 8, // Tamaño del área de juego.
+        const int ANCHO = 22, ALTO = 14, // Tamaño del área de juego.
 
-        SEP_OBS = 3, // Separación horizontal entre obstáculos.
+        SEP_OBS = 7, // Separación horizontal entre obstáculos.
 
-        HUECO = 3, // Hueco de los obstáculos (en vertical).
+        HUECO = 7, // Hueco de los obstáculos (en vertical).
 
         COL_BIRD = ANCHO / 3, // Columna fija del pájaro.
 
@@ -30,39 +30,42 @@ namespace P2_FP1
         static void Main()
         { 
             // Declaraciones anteriores.
-            int[] suelo = { 0, 1, 0, 0, 2, 0, 0, 3, 0 }, techo = { 7, 5, 7, 7, 6, 7, 7, 7, 7 };
+            int[] suelo, techo;
             int fil, ascenso, frame, puntos;
-            bool colision = true;
+            bool colision;
 
             // Inicialización.
-            Inicializa(out suelo, out techo, out fil, out ascenso, out frame, out puntos, ref colision);
+            Inicializa(out suelo, out techo, out fil, out ascenso, out frame, out puntos, out colision);
 
-            // Renderizado.
+            // Renderizado inicial.
             Render(suelo, techo, fil, frame, puntos, colision);
 
             // Bucle principal.
             while(!colision)
             {
                 // Lectura de input.
-                LeeInput();
+                char c = LeeInput();
 
                 // Si el juego continua.
+                if(c != 'q')
+                {
+                    // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
+                    Avanza(suelo, techo, frame);
+                    Mueve(c, ref fil, ref ascenso);
+                    Colision(suelo, techo, fil);
+                    //Puntua(suelo, techo, ref puntos);
 
-                // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
-                Avanza(suelo, techo, frame);
-                Mueve(LeeInput(), ref fil, ref ascenso);
-                Colision(suelo, techo, fil);
-                Puntua(suelo, techo, ref puntos);
+                    // Renderizado.
+                    Render(suelo, techo, fil, frame, puntos, colision);
 
-                // Renderizado.
-                Render(suelo, techo, fil, frame, puntos, colision);
+                    Thread.Sleep(DELTA);
 
-                Thread.Sleep(DELTA);
+                    frame++;
+                }
             }
-
         }
 
-        static void Inicializa(out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, ref bool colision) //done
+        static void Inicializa(out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, out bool colision) //done
         {
             suelo = new int[ANCHO];
             techo = new int[ANCHO];
@@ -71,7 +74,7 @@ namespace P2_FP1
             for (int i = 0; i<ANCHO; i++)
             {
                 suelo[i] = 0;
-                techo[i]= 7;    
+                techo[i]= ALTO - 1;    
             }
 
             fil = ALTO / 2;
@@ -85,38 +88,40 @@ namespace P2_FP1
             // Limpia la consola en cada render.
             Console.Clear();
 
-            // Color azul para pintar las paredes.
-            Console.BackgroundColor = ConsoleColor.Blue;
-
             // Vamos recorriendo el ANCHO.
-            for (int i = 0; i < ANCHO; ++i)
+            for (int i = 0; i < ANCHO; i++)
             {
                 // TECHO. Recorremos el array de techo, desde techo[0] hasta techo[i],
                 // pintando así cada coordenada (i*2,j), en cada vuelta. 
-                for (int j = 0; j <= Convierte(techo[i]); j++)
+                for (int j = 1; j <= Convierte(techo[i]); j++)
                 {
                     Console.SetCursorPosition(i * 2, j);
+                    // Color azul para pintar las paredes.
+                    Console.BackgroundColor = ConsoleColor.Blue;
                     Console.Write("  ");
+                    // Devolvemos el color negro a la consola.
+                    Console.ResetColor();
                 }
 
                 // SUELO. Recorremos el array de suelo, desde suelo[ALTO-1] hasta suelo[0] (hacia atrás),
                 // pintando así cada coordenada (i*2,j), en cada vuelta. 
-                for (int j = ALTO - 1; j >= Convierte(suelo[i]); j--)
+                for (int j = Convierte(suelo[i]); j <= ALTO; j++)
                 {
                     Console.SetCursorPosition(i * 2, j);
+                    // Color azul para pintar las paredes.
+                    Console.BackgroundColor = ConsoleColor.Blue;
                     Console.Write("  ");
+                    // Devolvemos el color negro a la consola.
+                    Console.ResetColor();
                 }
             }
-
-            // Devolvemos el color negro a la consola.
-            Console.BackgroundColor = ConsoleColor.Black;
 
             #region Colision
             // Si no hay colisión...
             if (!colision)
             {
                 // Dibuja el pájaro con fondo magenta.
-                Console.SetCursorPosition(fil, COL_BIRD);
+                Console.SetCursorPosition(COL_BIRD, ALTO - fil - 1);
                 Console.BackgroundColor = ConsoleColor.Magenta;
                 Console.Write("->");
             }
@@ -179,47 +184,34 @@ namespace P2_FP1
                 suelo[i] = suelo[i + 1];
             }
 
+            int s, t;
 
             // ---- 2º COMPROBAMOS SI HAY QUE DAR NUEVO VALOR
-            //Busqueda??¿ miramos 
-            int cont = 0; //contador
-            while (cont <= SEP_OBS)
+            if(frame % SEP_OBS == 0)
             {
-                //no pintamos obstaculo
-                techo[techo.Length - 1] = 7; 
-                suelo[suelo.Length - 1] = 0;
-                
-                if (cont == SEP_OBS) //Cuando lleguemos
-                {
-                    // ---- 3º DAMOS VALOR NUEVO
-                    int s = rnd.Next(0, 4);
-                    int t = HUECO - 1 + s;
+                s = rnd.Next(0, ALTO - HUECO);
+                t = HUECO - 1 + s;
 
-                    suelo[suelo.Length - 1] = s;
-                    techo[techo.Length - 1] = t;
-                }
-                cont++;
+                suelo[ANCHO - 1] = s;
+                techo[ANCHO - 1] = t;
             }
-
-            //Cada SEP_OBS frames se genera un nuevo obstáculo situado aleatoriamente dentro de esa columna. De
-            //acuerdo a la lógica del juego se tiene 0 ≤ s < t ≤ ALTO − 1 y además el espacio de paso entre ambos
-            //será HUECO, es decir: t − s = HUECO − 1.Esto puede conseguirse fácilmente generando aleatoriamente
-            //el valor s en el rango apropiado y luego calculando t en función de s y HUECO.
-            //Con este método ya puede hacerse una primera versión del bucle principal para mostrar el scroll lateral
-            //con el suelo y el techo(y la generación de obstáculos)
-
+            else
+            {
+                suelo[ANCHO - 1] = 0;
+                techo[ANCHO - 1] = ALTO - 1;
+            }
         }
 
         #region Métodos que controlan el movimiento del pájaro 
         static void Mueve(char ch, ref int fil, ref int ascenso)
         {
-            // fil y ascenso pasan por referencia para que los valores modificados salgan del método.
+            //ascenso pasa por referencia para que los valores modificados salgan del método.
 
             // Si ch==’i’...
             if (ch == 'i')
             {
                 // Ascenso toma el valor IMPULSO.
-                ascenso = ascenso + IMPULSO;
+                ascenso = IMPULSO;
             }
 
             // Si ascenso ≥ 0... 
@@ -236,7 +228,10 @@ namespace P2_FP1
             else
             {
                 // Se decrementa fil.
-                fil--;
+                if(fil > 0)
+                {
+                    fil--;
+                }
             }
         }
 
@@ -266,19 +261,19 @@ namespace P2_FP1
             return false;
         }
 
-        static void Puntua(int[] suelo, int[] techo, ref int puntos)
-        {
-            // puntos pasa por referencia porque se quiere que su valor salga del método.
+        //static void Puntua(int[] suelo, int[] techo, ref int puntos)
+        //{
+        //    // puntos pasa por referencia porque se quiere que su valor salga del método.
 
-            // No sé realmente por qué no se puede añadir el parámetro fil a Puntua, haría todo más sencillo. Dejo por aquí una posible implementación NO VÁLIDA:
+        //    // No sé realmente por qué no se puede añadir el parámetro fil a Puntua, haría todo más sencillo. Dejo por aquí una posible implementación NO VÁLIDA:
 
-            // Si no colisiona con las columnas...
-            if (!Colision(suelo, techo, fil))
-            {
-                // Suma puntos.
-                puntos++;
-            }
-        }
+        //    // Si no colisiona con las columnas...
+        //    if (!Colision(suelo, techo, fil))
+        //    {
+        //        // Suma puntos.
+        //        puntos++;
+        //    }
+        //}
         #endregion
 
         static char LeeInput()
@@ -297,7 +292,7 @@ namespace P2_FP1
 
         static int Convierte(int c)
         {
-            return (ALTO - 1) - c;
+            return ALTO - c;
         }
         
     }
