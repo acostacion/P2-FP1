@@ -73,7 +73,10 @@ namespace P2_FP1
             // Inicializamos sin obstáculos:
             for (int i = 0; i<ANCHO; i++)
             {
+                // Suelo sin obstáculos.
                 suelo[i] = 0;
+
+                // Techo sin obstáculos.
                 techo[i]= ALTO - 1;    
             }
 
@@ -83,7 +86,7 @@ namespace P2_FP1
             colision = false;
         }
 
-        static void Render(int[] suelo, int[] techo, int fil, int frame, int puntos, bool colision)
+        static void Render(int[] suelo, int[] techo, int fil, int frame, int puntos, bool colision) // revisar
         {
             // Limpia la consola en cada render.
             Console.Clear();
@@ -121,7 +124,7 @@ namespace P2_FP1
             if (!colision)
             {
                 // Dibuja el pájaro con fondo magenta.
-                Console.SetCursorPosition(COL_BIRD, ALTO - fil - 1);
+                Console.SetCursorPosition(COL_BIRD * 2, ALTO - fil - 1);
                 Console.BackgroundColor = ConsoleColor.Magenta;
                 Console.Write("->");
             }
@@ -129,7 +132,7 @@ namespace P2_FP1
             else
             {
                 // Dibuja la muerte del pájaro en rojo.
-                Console.SetCursorPosition(fil, COL_BIRD);
+                Console.SetCursorPosition(COL_BIRD * 2, ALTO - fil - 1);
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.Write("**"); 
             }
@@ -171,14 +174,12 @@ namespace P2_FP1
             #endregion
         }
 
-        static void Avanza(int[] suelo, int[] techo, int frame)
+        static void Avanza(int[] suelo, int[] techo, int frame) // done (?)
         {
             // NOTA DE JT: la última posición del array es x.Length - 1, no techo.Length.
 
-            // ---- 1º MOVEMOS EL ARRAY CADA POSICION A LA IZQUIERDA
-
-            // Vamos moviendo techo hasta la PENultima posición del array.
-            for(int i = 0; i < techo.Length - 1; i++)
+            // Desplazamos todos los elementos una posición a la izquierda.
+            for (int i = 0; i < techo.Length - 1; i++)
             {
                 techo[i] = techo[i + 1];
                 suelo[i] = suelo[i + 1];
@@ -186,24 +187,29 @@ namespace P2_FP1
 
             int s, t;
 
-            // ---- 2º COMPROBAMOS SI HAY QUE DAR NUEVO VALOR
-            if(frame % SEP_OBS == 0)
+            // Comprobamos si debemos generar un nuevo obstáculo.
+            if (frame % SEP_OBS == 0)
             {
+                // Generamos "s" aleatoriamente dentro del rango.
                 s = rnd.Next(0, ALTO - HUECO);
+
+                // Generamos "t" basándonos en "s".
                 t = HUECO - 1 + s;
 
+                // Asignamos los nuevos valores a la última posición del array.
                 suelo[ANCHO - 1] = s;
                 techo[ANCHO - 1] = t;
             }
             else
             {
+                // Si no es un frame de obstáculo, asignamos valores predeterminados.
                 suelo[ANCHO - 1] = 0;
                 techo[ANCHO - 1] = ALTO - 1;
             }
         }
 
         #region Métodos que controlan el movimiento del pájaro 
-        static void Mueve(char ch, ref int fil, ref int ascenso)
+        static void Mueve(char ch, ref int fil, ref int ascenso) // done
         {
             //ascenso pasa por referencia para que los valores modificados salgan del método.
 
@@ -235,7 +241,7 @@ namespace P2_FP1
             }
         }
 
-        static bool Colision(int[] suelo, int[] techo, int fil)
+        static bool Colision(int[] suelo, int[] techo, int fil) // done.
         {
             // TECHO. Recorremos el array de techo.
             for (int i = 0; i <= techo.Length - 1; i++)
@@ -274,6 +280,13 @@ namespace P2_FP1
         //        puntos++;
         //    }
         //}
+        #endregion
+
+        #region Guardar y cargar el juego.
+        void GuardaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos)
+        {
+
+        }
         #endregion
 
         static char LeeInput()
