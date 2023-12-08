@@ -241,7 +241,7 @@ namespace P2_FP1
             }
         }
 
-        static bool Colision(int[] suelo, int[] techo, int fil) // done.
+        static bool Colision(int[] suelo, int[] techo, int fil) // mirar en el Main porque creo que el método está bien pero en el main no.
         {
             // TECHO. Recorremos el array de techo.
             for (int i = 0; i <= techo.Length - 1; i++)
@@ -285,7 +285,47 @@ namespace P2_FP1
         #region Guardar y cargar el juego.
         void GuardaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos)
         {
+            // Crear o sobrescribir el archivo.
+            using (StreamWriter sw = new StreamWriter(file))
+            {
+                // Escribir las variables.
+                sw.WriteLine(fil);
+                sw.WriteLine(ascenso);
+                sw.WriteLine(frame);
+                sw.WriteLine(puntos);
 
+                // Encontrar las posiciones de los obstáculos y escribirlas.
+                for (int i = 0; i < suelo.Length; i = i + SEP_OBS)
+                {
+                    // Suelo y techo sin obstáculos.
+                    if (suelo[i] != 0 || techo[i] != ALTO - 1) 
+                    {
+                        // Posición del array.
+                        sw.WriteLine(i);
+
+                        // Valores de suelo y techo para el obstáculo.
+                        sw.WriteLine(suelo[i] + " " + techo[i]); 
+                    }
+                }
+            }
+        }
+
+        void CargaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos, bool colision)
+        {
+            // Inicializar la variable colision a false.
+            colision = false;
+
+            // Leer el archivo.
+            using (StreamReader sr = new StreamReader(file))
+            {
+                // Leer las variables.
+                fil = int.Parse(sr.ReadLine());
+                ascenso = int.Parse(sr.ReadLine());
+                frame = int.Parse(sr.ReadLine());
+                puntos = int.Parse(sr.ReadLine());
+            }
+
+            // FALTA LEER LO DE LOS ARRAYS.
         }
         #endregion
 
