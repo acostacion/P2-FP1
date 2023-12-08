@@ -28,40 +28,58 @@ namespace P2_FP1
         #endregion
 
         static void Main()
-        { 
-            // Declaraciones anteriores.
-            int[] suelo, techo;
-            int fil, ascenso, frame, puntos;
-            bool colision;
+        {
+            // Declaraciones anteriores (está inicializado para que no de error en el cargajuego).
+            int[] suelo = null, techo = null;
+            int fil = 0, ascenso = 0, frame = 0, puntos = 0;
+            bool colision = false;
 
-            // Inicialización.
-            Inicializa(out suelo, out techo, out fil, out ascenso, out frame, out puntos, out colision);
+            // Preguntar si se quiere cargar un juego guardado o iniciar uno nuevo.
+            Console.WriteLine("¿Deseas cargar un juego guardado (c) o iniciar uno nuevo (n)?");
+            char opcion = Console.ReadKey().KeyChar;
+
+            if (opcion == 'c')
+            {
+                // Cargar juego.
+                /*Console.WriteLine("Introduce el nombre del archivo de guardado:");
+                string archivo = Console.ReadLine();
+                CargaJuego(archivo, ref suelo, ref techo, ref fil, ref ascenso, ref frame, ref puntos, ref colision);*/
+            }
+            else
+            {
+                // Inicialización.
+                Inicializa(out suelo, out techo, out fil, out ascenso, out frame, out puntos, out colision);
+            }
 
             // Renderizado inicial.
             Render(suelo, techo, fil, frame, puntos, colision);
 
             // Bucle principal.
-            while(!colision)
+            while(!colision && opcion != 'q')
             {
                 // Lectura de input.
                 char c = LeeInput();
 
-                // Si el juego continua.
-                if(c != 'q')
-                {
-                    // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
-                    Avanza(suelo, techo, frame);
-                    Mueve(c, ref fil, ref ascenso);
-                    Colision(suelo, techo, fil);
-                    //Puntua(suelo, techo, ref puntos);
+                // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
+                Avanza(suelo, techo, frame);
+                Mueve(c, ref fil, ref ascenso);
+                Colision(suelo, techo, fil);
+                Puntua(suelo, techo, ref puntos);
 
-                    // Renderizado.
-                    Render(suelo, techo, fil, frame, puntos, colision);
+                // Renderizado.
+                Render(suelo, techo, fil, frame, puntos, colision);
 
-                    Thread.Sleep(DELTA);
+                Thread.Sleep(DELTA);
 
-                    frame++;
-                }
+                frame++;
+            }
+
+            // Opción de guardar el juego después de salir del bucle ppal.
+            Console.WriteLine("¿Deseas guardar el juego? (s/n)");
+            opcion = Console.ReadKey().KeyChar;
+            if (opcion == 's')
+            {
+                // (guardar juego).
             }
         }
 
@@ -241,7 +259,7 @@ namespace P2_FP1
             }
         }
 
-        static bool Colision(int[] suelo, int[] techo, int fil) // mirar en el Main porque creo que el método está bien pero en el main no.
+        static bool Colision(int[] suelo, int[] techo, int fil) // creo q está mal.
         {
             // TECHO. Recorremos el array de techo.
             for (int i = 0; i <= techo.Length - 1; i++)
@@ -267,23 +285,23 @@ namespace P2_FP1
             return false;
         }
 
-        //static void Puntua(int[] suelo, int[] techo, ref int puntos)
-        //{
-        //    // puntos pasa por referencia porque se quiere que su valor salga del método.
+        static void Puntua(int[] suelo, int[] techo, ref int puntos) // done.
+        {
+            // puntos pasa por referencia porque se quiere que su valor salga del método.
 
-        //    // No sé realmente por qué no se puede añadir el parámetro fil a Puntua, haría todo más sencillo. Dejo por aquí una posible implementación NO VÁLIDA:
+            // ESTO DE ABAJO ME LO HA SUGERIDO BING CHAT PORQUE YA NO SABÍA CÓMO HACERLO..
 
-        //    // Si no colisiona con las columnas...
-        //    if (!Colision(suelo, techo, fil))
-        //    {
-        //        // Suma puntos.
-        //        puntos++;
-        //    }
-        //}
+            // Asumiendo que el pájaro siempre está en la columna COL_BIRD
+            if (suelo[COL_BIRD] != 0 || techo[COL_BIRD] != ALTO - 1)
+            {
+                // Si hay un obstáculo en la columna del pájaro, incrementa los puntos
+                puntos++;
+            }
+        }
         #endregion
 
         #region Guardar y cargar el juego.
-        void GuardaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos)
+        static void GuardaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos)
         {
             // Crear o sobrescribir el archivo.
             using (StreamWriter sw = new StreamWriter(file))
@@ -310,7 +328,7 @@ namespace P2_FP1
             }
         }
 
-        void CargaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos, bool colision)
+        static void CargaJuego(string file, ref int[] suelo, ref int[] techo, ref int fil, ref int ascenso, ref int frame, ref int puntos, ref bool colision)
         {
             // Inicializar la variable colision a false.
             colision = false;
