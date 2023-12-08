@@ -133,9 +133,9 @@ namespace P2_FP1
             // Vamos recorriendo el ANCHO.
             for (int i = 0; i < ANCHO; i++)
             {
-                // TECHO. Recorremos el array de techo, desde techo[0] hasta techo[i],
+                // TECHO. Recorremos el array de techo, desde techo[0] hasta techo[i] ,
                 // pintando así cada coordenada (i*2,j), en cada vuelta. 
-                for (int j = 0; j <= Convierte(techo[i]) - 1; j++)
+                for (int j = 0; j < Convierte(techo[i]); j++)
                 {
                     Console.SetCursorPosition(i * 2, j);
                     // Color azul para pintar las paredes.
@@ -343,9 +343,22 @@ namespace P2_FP1
             frame = int.Parse(entrada.ReadLine());
             puntos = int.Parse(entrada.ReadLine());
 
+            // Inicializar los arrays.
+            suelo = new int[ANCHO];
+            techo = new int[ANCHO];
+
+            // Recorre el array.
+            for (int i = 0; i < ALTO; i++)
+            {
+                suelo[i] = 0; // Suelo sin obstáculos.
+                techo[i] = ALTO - 1; // Techo sin obstáculos.
+            }
+
+            // Falta hacer la lectura del array.
+
             // Cierre de flujo
             entrada.Close();
-            // FALTA LEER LO DE LOS ARRAYS.
+            
         }
         #endregion
 
