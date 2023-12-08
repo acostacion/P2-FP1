@@ -4,6 +4,7 @@
 using System.Drawing;
 using System;
 using System.Runtime.CompilerServices;
+using System.IO;
 
 namespace P2_FP1
 {
@@ -54,24 +55,47 @@ namespace P2_FP1
             // Renderizado inicial.
             Render(suelo, techo, fil, frame, puntos, colision);
 
+            bool pausar = false, salir = false;
+
             // Bucle principal.
-            while(!colision && opcion != 'q')
+            while(!colision && !salir)
             {
-                // Lectura de input.
-                char c = LeeInput();
+                if (!pausar)
+                {
+                    // Lectura de input.
+                    char c = LeeInput();
 
-                // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
-                Avanza(suelo, techo, frame);
-                Mueve(c, ref fil, ref ascenso);
-                Colision(suelo, techo, fil);
-                Puntua(suelo, techo, ref puntos);
+                    if (c == 'p')
+                    {
+                        pausar = true;
+                        Console.WriteLine("Juego pausado. Presiona cualquier tecla para continuar...");
+                        Console.ReadLine(); 
+                        pausar = false;
+                    }
+                    else if (c == 'q')
+                    {
+                        salir = true; 
+                    }
+                    else
+                    {
+                        // Scroll lateral + movimiento pájaro + colisiones + gestión de puntos.
+                        Avanza(suelo, techo, frame);
+                        colision = Colision(suelo, techo, fil); // Comprueba colisión cada vez que se mueve para no atravesar paredes (en este caso escenario).
+                        Mueve(c, ref fil, ref ascenso);
+                        colision = Colision(suelo, techo, fil); // Comprueba colisión cada vez que se mueve para no atravesar paredes (en este caso pájaro).
+                        Puntua(suelo, techo, ref puntos);
 
-                // Renderizado.
-                Render(suelo, techo, fil, frame, puntos, colision);
+                        // Renderizado.
+                        Render(suelo, techo, fil, frame, puntos, colision);
 
-                Thread.Sleep(DELTA);
+                        Thread.Sleep(DELTA);
 
-                frame++;
+                        frame++;
+                    }
+
+                    
+                }
+                
             }
 
             // Opción de guardar el juego después de salir del bucle ppal.
@@ -89,7 +113,7 @@ namespace P2_FP1
             techo = new int[ANCHO];
 
             // Inicializamos sin obstáculos:
-            for (int i = 0; i<ANCHO; i++)
+            for (int i = 0; i < ANCHO; i++)
             {
                 // Suelo sin obstáculos.
                 suelo[i] = 0;
@@ -192,7 +216,7 @@ namespace P2_FP1
             #endregion
         }
 
-        static void Avanza(int[] suelo, int[] techo, int frame) // done (?)
+        static void Avanza(int[] suelo, int[] techo, int frame) // done
         {
             // NOTA DE JT: la última posición del array es x.Length - 1, no techo.Length.
 
@@ -259,30 +283,9 @@ namespace P2_FP1
             }
         }
 
-        static bool Colision(int[] suelo, int[] techo, int fil) // creo q está mal.
-        {
-            // TECHO. Recorremos el array de techo.
-            for (int i = 0; i <= techo.Length - 1; i++)
-            {
-                // Comprobamos colision con array de techo. Si coincide con 'fil', hay colisión.
-                if (fil == techo[i])
-                {
-                    return true;
-                }
-            }
-
-            // SUELO. Recorremos el array de suelo (para atrás).
-            for (int i = suelo.Length - 1; i >= 0; i--)
-            {
-                // Comprobamos colision con array de suelo. Si coincide con 'fil', hay colisión.
-                if (fil == suelo[i])
-                {
-                    return true;
-                }
-            }
-
-            // No hay colisión.
-            return false;
+        static bool Colision(int[] suelo, int[] techo, int fil) // done
+        { 
+            return suelo[COL_BIRD] >= fil || techo[COL_BIRD] <= fil;
         }
 
         static void Puntua(int[] suelo, int[] techo, ref int puntos) // done.
@@ -303,29 +306,31 @@ namespace P2_FP1
         #region Guardar y cargar el juego.
         static void GuardaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos)
         {
-            // Crear o sobrescribir el archivo.
-            using (StreamWriter sw = new StreamWriter(file))
+            // Declaración de flujo de salida, creación y asociación a un archivo concreto.
+            StreamWriter salida = new StreamWriter("documento.txt");
+
+            // Escribir las variables.
+            salida.WriteLine(fil);
+            salida.WriteLine(ascenso);
+            salida.WriteLine(frame);
+            salida.WriteLine(puntos);
+
+            // Encontrar las posiciones de los obstáculos y escribirlas.
+            for (int i = 0; i < suelo.Length; i = i + SEP_OBS)
             {
-                // Escribir las variables.
-                sw.WriteLine(fil);
-                sw.WriteLine(ascenso);
-                sw.WriteLine(frame);
-                sw.WriteLine(puntos);
-
-                // Encontrar las posiciones de los obstáculos y escribirlas.
-                for (int i = 0; i < suelo.Length; i = i + SEP_OBS)
+                // Suelo y techo sin obstáculos.
+                if (suelo[i] != 0 || techo[i] != ALTO - 1)
                 {
-                    // Suelo y techo sin obstáculos.
-                    if (suelo[i] != 0 || techo[i] != ALTO - 1) 
-                    {
-                        // Posición del array.
-                        sw.WriteLine(i);
+                    // Posición del array.
+                    salida.WriteLine(i);
 
-                        // Valores de suelo y techo para el obstáculo.
-                        sw.WriteLine(suelo[i] + " " + techo[i]); 
-                    }
+                    // Valores de suelo y techo para el obstáculo.
+                    salida.WriteLine(suelo[i] + " " + techo[i]);
                 }
             }
+
+            // Cierre de flujo.
+            salida.Close();
         }
 
         static void CargaJuego(string file, ref int[] suelo, ref int[] techo, ref int fil, ref int ascenso, ref int frame, ref int puntos, ref bool colision)
@@ -333,15 +338,18 @@ namespace P2_FP1
             // Inicializar la variable colision a false.
             colision = false;
 
-            // Leer el archivo.
-            using (StreamReader sr = new StreamReader(file))
-            {
-                // Leer las variables.
-                fil = int.Parse(sr.ReadLine());
-                ascenso = int.Parse(sr.ReadLine());
-                frame = int.Parse(sr.ReadLine());
-                puntos = int.Parse(sr.ReadLine());
-            }
+            // Declaración de flujo de entrada, creación de flujo y asociación al archivo.
+            StreamReader entrada = new StreamReader("documento.txt");
+
+            // Lectura de líneas de texto.
+            fil = int.Parse(entrada.ReadLine());
+            ascenso = int.Parse(entrada.ReadLine());
+            frame = int.Parse(entrada.ReadLine());
+            puntos = int.Parse(entrada.ReadLine());
+
+            // Cierre de flujo
+            entrada.Close();
+
 
             // FALTA LEER LO DE LOS ARRAYS.
         }
@@ -364,8 +372,7 @@ namespace P2_FP1
         static int Convierte(int c)
         {
             return ALTO - c;
-        }
-        
+        } 
     }
 }
 
