@@ -69,12 +69,12 @@ namespace P2_FP1
                     {
                         pausar = true;
                         Console.WriteLine("Juego pausado. Presiona cualquier tecla para continuar...");
-                        Console.ReadLine(); 
+                        Console.ReadLine();
                         pausar = false;
                     }
                     else if (c == 'q')
                     {
-                        salir = true; 
+                        salir = true;
                     }
                     else
                     {
@@ -92,10 +92,7 @@ namespace P2_FP1
 
                         frame++;
                     }
-
-                    
-                }
-                
+                }  
             }
 
             // Opción de guardar el juego después de salir del bucle ppal.
@@ -138,7 +135,7 @@ namespace P2_FP1
             {
                 // TECHO. Recorremos el array de techo, desde techo[0] hasta techo[i],
                 // pintando así cada coordenada (i*2,j), en cada vuelta. 
-                for (int j = 1; j <= Convierte(techo[i]); j++)
+                for (int j = 0; j <= Convierte(techo[i]) - 1; j++)
                 {
                     Console.SetCursorPosition(i * 2, j);
                     // Color azul para pintar las paredes.
@@ -328,7 +325,6 @@ namespace P2_FP1
                     salida.WriteLine(suelo[i] + " " + techo[i]);
                 }
             }
-
             // Cierre de flujo.
             salida.Close();
         }
@@ -349,8 +345,6 @@ namespace P2_FP1
 
             // Cierre de flujo
             entrada.Close();
-
-
             // FALTA LEER LO DE LOS ARRAYS.
         }
         #endregion
