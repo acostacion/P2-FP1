@@ -26,29 +26,31 @@ namespace P2_FP1
         IMPULSO = 3, // Unidades de ascenso por aleteo.
 
         DELTA = 300; // Retardo entre frames (ms).
+
+        const string FILE = "documento.txt";
         #endregion
 
         static void Main()
         {
-            // Declaraciones anteriores (está inicializado para que no de error en el cargajuego).
-            int[] suelo = null, techo = null;
-            int fil = 0, ascenso = 0, frame = 0, puntos = 0;
-            bool colision = false;
+            int[] suelo, techo;
+            int fil, ascenso, frame, puntos;
+            bool colision;
 
+            
             // Preguntar si se quiere cargar un juego guardado o iniciar uno nuevo.
             Console.WriteLine("¿Deseas cargar un juego guardado (c) o iniciar uno nuevo (n)?");
             char opcion = Console.ReadKey().KeyChar;
 
             if (opcion == 'c')
             {
-                // Cargar juego.
-                /*Console.WriteLine("Introduce el nombre del archivo de guardado:");
-                string archivo = Console.ReadLine();
-                CargaJuego(archivo, ref suelo, ref techo, ref fil, ref ascenso, ref frame, ref puntos, ref colision);*/
+                // El carga lleva valores OUT porque se crean aquí, por eso no hace falta inicializar antes, aparte q
+                // en el enunciado no nos vienen inicializados asiq los dejamos como viene mejor.
+                // documento.txt lo he creado dentro de la carpeta Debug !! muy important
+                CargaJuego(FILE, out suelo, out techo, out fil, out ascenso, out frame, out puntos, out colision);
             }
             else
             {
-                // Inicialización.
+                // Inicialización en caso de que no se cargue:
                 Inicializa(out suelo, out techo, out fil, out ascenso, out frame, out puntos, out colision);
             }
 
@@ -67,7 +69,7 @@ namespace P2_FP1
 
                     if (c == 'p')
                     {
-                        pausar = true;
+                        pausar = true; //esto no lo estamos usando, igual se plantea de otra manera ?
                         Console.WriteLine("Juego pausado. Presiona cualquier tecla para continuar...");
                         Console.ReadLine();
                         pausar = false;
@@ -100,7 +102,7 @@ namespace P2_FP1
             opcion = Console.ReadKey().KeyChar;
             if (opcion == 's')
             {
-                // (guardar juego).
+                GuardaJuego(FILE, suelo, techo, fil, ascenso, frame, puntos);
             }
         }
 
@@ -304,7 +306,7 @@ namespace P2_FP1
         static void GuardaJuego(string file, int[] suelo, int[] techo, int fil, int ascenso, int frame, int puntos)
         {
             // Declaración de flujo de salida, creación y asociación a un archivo concreto.
-            StreamWriter salida = new StreamWriter("documento.txt");
+            StreamWriter salida = new StreamWriter(file);
 
             // Escribir las variables.
             salida.WriteLine(fil);
@@ -329,13 +331,13 @@ namespace P2_FP1
             salida.Close();
         }
 
-        static void CargaJuego(string file, ref int[] suelo, ref int[] techo, ref int fil, ref int ascenso, ref int frame, ref int puntos, ref bool colision)
+        static void CargaJuego(string file, out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, out bool colision)
         {
             // Inicializar la variable colision a false.
             colision = false;
 
             // Declaración de flujo de entrada, creación de flujo y asociación al archivo.
-            StreamReader entrada = new StreamReader("documento.txt");
+            StreamReader entrada = new StreamReader(file);
 
             // Lectura de líneas de texto.
             fil = int.Parse(entrada.ReadLine());
@@ -353,8 +355,12 @@ namespace P2_FP1
                 suelo[i] = 0; // Suelo sin obstáculos.
                 techo[i] = ALTO - 1; // Techo sin obstáculos.
             }
-
-            // Falta hacer la lectura del array.
+            
+            // Falta hacer la lectura del array. Esto es un bucle for?¿¿
+            while(!entrada.EndOfStream) //Mientras no acabe el archivo, lo leemos.
+            {
+              
+            }
 
             // Cierre de flujo
             entrada.Close();
