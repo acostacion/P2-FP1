@@ -359,12 +359,29 @@ namespace P2_FP1
             // Falta hacer la lectura del array. Esto es un bucle for?¿¿
             while(!entrada.EndOfStream) //Mientras no acabe el archivo, lo leemos.
             {
-              
+                
+                for (int i = 0; i < suelo.Length; i = i + SEP_OBS)
+                {
+                    // Suelo y techo sin obstáculos.
+                    if (suelo[i] != 0 || techo[i] != ALTO - 1)
+                    {
+                        // //Lee el primer numero, posicion del array.
+                        int.Parse(entrada.ReadLine());
+
+                        // Valores de suelo y techo para el obstáculo.
+                        // Habría 
+                        string[] valores = entrada.ReadLine().Split(' ');
+                        for(int j = 0; j < valores.Length; j++)
+                        {
+                            suelo[i] = int.Parse(valores[j]);
+                            techo[i] = int.Parse(valores[j]);
+                        }
+                    }
+                }
             }
 
             // Cierre de flujo
             entrada.Close();
-            
         }
         #endregion
 
