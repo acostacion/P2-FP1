@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Sierra Luque\\.nuget\\packages\\": {}
+    "C:\\Users\\Usuario\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sierra Luque\\Documents\\GitHub\\P2-FP1\\P2 FP1.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\Documents\\P2-FP1\\P2 FP1.csproj",
       "projectName": "P2 FP1",
-      "projectPath": "C:\\Users\\Sierra Luque\\Documents\\GitHub\\P2-FP1\\P2 FP1.csproj",
-      "packagesPath": "C:\\Users\\Sierra Luque\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sierra Luque\\Documents\\GitHub\\P2-FP1\\obj\\",
+      "projectPath": "C:\\Users\\Usuario\\Documents\\P2-FP1\\P2 FP1.csproj",
+      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Usuario\\Documents\\P2-FP1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Sierra Luque\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -61,7 +61,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
