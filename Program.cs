@@ -314,74 +314,80 @@ namespace P2_FP1
             salida.WriteLine(frame);
             salida.WriteLine(puntos);
 
-            // Encontrar las posiciones de los obstáculos y escribirlas.
-            for (int i = 0; i < suelo.Length; i = i + SEP_OBS)
-            {
-                // Suelo y techo sin obstáculos.
-                if (suelo[i] != 0 || techo[i] != ALTO - 1)
-                {
-                    // Posición del array.
-                    salida.WriteLine(i);
+            // Buscamos donde hay obstaculo.
+            int i = 0, posicion = 0;
+            bool encontrado = false;
 
-                    // Valores de suelo y techo para el obstáculo.
-                    salida.WriteLine(suelo[i] + " " + techo[i]);
+            while (i < ANCHO && !encontrado)
+            {
+                if (suelo[i] != 0) // Si encontramos obstáculo,
+                {
+                    posicion = i;
+                    salida.WriteLine(posicion); // Escribimos la posición de donde está el obstáculo
+                    encontrado = true;
                 }
+                i++;
             }
+
+            for(int j = posicion; j < ANCHO; j += SEP_OBS)
+            {
+                salida.Write(suelo[j] + " " + techo[j] + " ");
+            }
+
             // Cierre de flujo.
             salida.Close();
         }
 
         static void CargaJuego(string file, out int[] suelo, out int[] techo, out int fil, out int ascenso, out int frame, out int puntos, out bool colision)
         {
-            // Inicializar la variable colision a false.
-            colision = false;
 
-            // Declaración de flujo de entrada, creación de flujo y asociación al archivo.
-            StreamReader entrada = new StreamReader(file);
-
-            // Lectura de líneas de texto.
-            fil = int.Parse(entrada.ReadLine());
-            ascenso = int.Parse(entrada.ReadLine());
-            frame = int.Parse(entrada.ReadLine());
-            puntos = int.Parse(entrada.ReadLine());
-
-            // Inicializar los arrays.
-            suelo = new int[ANCHO];
-            techo = new int[ANCHO];
-
-            // Recorre el array.
-            for (int i = 0; i < ALTO; i++)
+            if (File.Exists(file))
             {
-                suelo[i] = 0; // Suelo sin obstáculos.
-                techo[i] = ALTO - 1; // Techo sin obstáculos.
-            }
-            
-            // Falta hacer la lectura del array. Esto es un bucle for?¿¿
-            while(!entrada.EndOfStream) //Mientras no acabe el archivo, lo leemos.
-            {
-                
-                for (int i = 0; i < suelo.Length; i = i + SEP_OBS)
+                StreamReader entrada = new StreamReader(file);
+
+                fil = int.Parse(entrada.ReadLine());
+                ascenso = int.Parse(entrada.ReadLine());
+                frame = int.Parse(entrada.ReadLine());
+                puntos = int.Parse(entrada.ReadLine());
+
+                suelo = new int[ANCHO];
+                techo = new int[ANCHO];
+
+                for (int i = 0; i < ANCHO; i++)
                 {
-                    // Suelo y techo sin obstáculos.
-                    if (suelo[i] != 0 || techo[i] != ALTO - 1)
-                    {
-                        // //Lee el primer numero, posicion del array.
-                        int.Parse(entrada.ReadLine());
+                    suelo[i] = 0;
+                    techo[i] = ALTO - 1;
+                }
 
-                        // Valores de suelo y techo para el obstáculo.
-                        // Habría 
-                        string[] valores = entrada.ReadLine().Split(' ');
-                        for(int j = 0; j < valores.Length; j++)
-                        {
-                            suelo[i] = int.Parse(valores[j]);
-                            techo[i] = int.Parse(valores[j]);
-                        }
+                // Leer los obstáculos guardados en el archivo y actualizar los arrays suelo y techo
+                int posicion = int.Parse(entrada.ReadLine());
+                string linea;
+
+                while ((linea = entrada.ReadLine()) != null)
+                { 
+                    // Creamos un array de los elementos separados por " "
+                    string[] valores = linea.Split(" ", StringSplitOptions.RemoveEmptyEntries); 
+
+                    for (int i = 0; i < valores.Length; i += 2) // En vez de i++, vamos sumando i=i+2.
+                    {
+                        string valorSuelo = valores[i];
+                        string valorTecho = valores[i + 1];
+
+                        suelo[posicion] = int.Parse(valorSuelo);
+                        techo[posicion] = int.Parse(valorTecho);
+
+                        posicion += SEP_OBS;
                     }
                 }
-            }
 
-            // Cierre de flujo
-            entrada.Close();
+                entrada.Close();
+                colision = false;
+            }
+            else
+            {
+                // Si no existe, inicializar desde cero.
+                Inicializa(out suelo, out techo, out fil, out ascenso, out frame, out puntos, out colision);
+            }
         }
         #endregion
 
