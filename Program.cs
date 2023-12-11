@@ -314,7 +314,7 @@ namespace P2_FP1
             salida.WriteLine(frame);
             salida.WriteLine(puntos);
 
-            // Buscamos donde hay obstaculo.
+            // Buscamos donde hay obstaculo. BUSQUEDA -> WHILE (importante)
             int i = 0, posicion = 0;
             bool encontrado = false;
 
@@ -329,6 +329,7 @@ namespace P2_FP1
                 i++;
             }
 
+            // Escribimos los valores desde posicion, sumando SEP_OBS, hasta llegar a ANCHO.
             for(int j = posicion; j < ANCHO; j += SEP_OBS)
             {
                 salida.Write(suelo[j] + " " + techo[j] + " ");
